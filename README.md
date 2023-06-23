@@ -136,31 +136,8 @@ plt.show()
 ```
 ![skewVsKur.png](images/skewVsKur.png)
 
-## Train-Val split 
 
-```python
-# Convert the features to a NumPy array
-X = features.to_numpy()
-
-# Convert the labels to a NumPy array
-y = labels.to_numpy()
-
-# Perform a stratified train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, stratify=y, random_state=42)
-```
-
-## Training an SVM Radial Model
-```python3
-# Train an SVM radial model
-svm_model = SVC(kernel='rbf')
-svm_model.fit(X, y)
-
-# Evaluate the model on the test set
-accuracy = svm_model.score(X_test, y_test)
-print(f"Accuracy: {accuracy}")
-```
-
-### Principal Component Analysis (PCA)
+## Principal Component Analysis (PCA)
 
 To gain insights into the dataset and understand the potential for image classification, I performed Principal Component Analysis (PCA). Initially, I reduced the dimensionality of the image data to two principal components (n=2) and visualized it in a 2D plot. Subsequently, I expanded the analysis to three principal components (n=3) and plotted the results in a 3D plot.
 
@@ -188,36 +165,93 @@ Based on the limitations of PCA analysis, I recognized the need to explore alter
 
 Stay tuned for updates as I delve deeper into the project, explore new approaches, and work towards improving the accuracy of the identity verification model.
 
+## Train-Val split 
 
+```python
+# Convert the features to a NumPy array
+X = features.to_numpy()
 
+# Convert the labels to a NumPy array
+y = labels.to_numpy()
 
+# Perform a stratified train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, stratify=y, random_state=42)
+```
 
+## Support Vector Classifier
 
-## Using Support Vector Classifier
+```python3
+# Train an SVM radial model
+svm_model = SVC(kernel='rbf')
+svm_model.fit(X, y)
+
+# Evaluate the model on the test set
+accuracy = svm_model.score(X_test, y_test)
+print(f"Accuracy: {accuracy}")
+```
+
 
 I experimented with the Support Vector Classifier (SVC) for identity verification. It showed high accuracy on the training and validation sets but didn't perform as well on the test set provided by the bitgrit platform. SVC is a popular classification algorithm known for handling complex decision boundaries. I'll explore other approaches, like ensemble methods or fine-tuning SVC hyperparameters, to improve model performance and enhance the accuracy of the identity verification system.
 
-## Project Structure
+## ResNext101 CNN Model
 
-Please refer to the project structure outlined below to navigate through the repository:
+For the classification task, I utilized a ResNeXt101 CNN model and trained it on the dataset. To prepare the data, I reshaped the instances from a 1200 shape to a 20x20x3 format, suitable for input into the CNN architecture.
 
-- `data/`: Contains the datasets used for training and testing the model.
-- `preprocessing/`: Includes scripts for data preprocessing and transformations.
-- `models/`: Contains trained models and scripts for model training and evaluation.
-- `notebooks/`: Jupyter notebooks with detailed explanations and code examples.
-- `docs/`: Additional project documentation, such as research papers or project proposals.
-- `results/`: Contains evaluation results and performance metrics.
-- `scripts/`: Additional utility scripts for various tasks.
+During training, the model exhibited good validation accuracy, indicating its ability to learn meaningful patterns and features from the data. However, when evaluated on the test set, the model's performance yielded an accuracy of around 65 percent.
 
-## Usage and Reproduction
+## KNN Classifier
 
-To reproduce the project results, follow the instructions provided in the individual directories and refer to the documentation within the notebooks. Feel free to adapt the codebase for your own experiments or contribute to the project by submitting pull requests.
+```python
+from sklearn.neighbors import KNeighborsClassifier
 
-## References
+# Define the parameter grid to search over
+param_grid = {
+    'n_neighbors': [3, 5, 7, 9, 11],  # Different values for the number of neighbors
+    'weights': ['uniform', 'distance'],  # Different weight options
+    'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],  # Different algorithm options
+    'leaf_size': [10, 20, 30],  # Different leaf size options
+}
 
-Include a list of references, research papers, articles, or external resources that have been influential in the project.
+# Create a kNN classifier object
+knn_model = KNeighborsClassifier()
 
-Feel free to customize the content as needed and adjust the formatting to match your preferences.
+# Perform grid search with cross-validation
+grid_search = GridSearchCV(knn_model, param_grid, cv=5)  # Adjust cv parameter for desired number of cross-validation folds
+grid_search.fit(X_train, y_train)
+
+# Get the best classifier from the grid search
+best_knn_model = grid_search.best_estimator_
+
+# Make predictions on the test set using the best classifier
+test_predictions = best_knn_model.predict(X_test)
+
+# Calculate accuracy on the test set
+accuracy = accuracy_score(y_test, test_predictions)
+print(f"Accuracy: {accuracy}")
+
+```
+
+Finally, I employed the K-Nearest Neighbors (KNN) classifier for the identity verification task. The KNN algorithm is a non-parametric, instance-based learning method that makes predictions based on the majority vote of its nearest neighbors.
+
+Remarkably, the KNN classifier exhibited good accuracy on both the validation and test sets, indicating its effectiveness in capturing the underlying patterns within the data. This performance can be attributed to the nature of the KNN algorithm, which does not make any assumptions about the underlying data distribution or model structure. Instead, it relies on the proximity of instances in the feature space to make predictions.
+
+By considering the nearest neighbors, the KNN classifier can effectively capture the local structure of the data, making it robust to variations and complex decision boundaries. This attribute makes the KNN classifier suitable for the identity verification task, as it can discern patterns within the data without assuming any specific functional form.
+
+The success of the KNN classifier in achieving good accuracy on both the validation and test sets indicates its ability to generalize well and make accurate predictions on unseen data. This makes it a promising choice for the identity verification system, providing reliable results and bolstering the integrity of online transactions.
+
+Moving forward, further refinements to the KNN classifier, such as optimizing the value of K or exploring distance metrics, may be explored to enhance its performance and ensure its suitability for real-world applications.
+
+
+
+## Additional 
+
+Additionally, I experimented with training a Vision Transformer, specifically the DeiT (Data-efficient image Transformers) model, for the identity verification task. In this approach, the images were resized to a 20x20x3 format to match the input requirements of the Vision Transformer. Despite the potential of Vision Transformers in capturing global dependencies and patterns in images, the results obtained were not satisfactory in terms of accuracy.
+
+Furthermore, I implemented a Deep Feedforward Neural Network (FFNN) with an input size of 1200, representing the flattened 20x20x3 image data, and an output layer size of 2 for the binary classification task. However, similar to the Vision Transformer, the FFNN model did not yield desirable results in terms of accuracy.
+
+These outcomes indicate that the complexity and nature of the identity verification task require more sophisticated approaches than what the Vision Transformer or FFNN models could provide in their current configurations. It highlights the need to explore alternative architectures, feature engineering techniques, or model enhancements to improve the accuracy and effectiveness of the identity verification system.
+
+Despite these initial setbacks, these experiments have provided valuable insights into the strengths and limitations of different models and approaches for the given task. These findings will guide future iterations and help in devising more effective strategies to tackle the challenges of identity verification and enhance the overall performance of the system.
 
 
 
