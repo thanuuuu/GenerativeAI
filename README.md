@@ -77,17 +77,88 @@ labels = data.iloc[:, 0]
 features = data.iloc[:, 1:]
 ```
 
-```python
-# Separate the labels and features
-labels = data.iloc[:, 0]
-features = data.iloc[:, 1:]
-```
-
-
 
 
 
 ## Data Visualization
+
+
+Calculating standard deviation, kurtosis, and skewness for each instance's 1200 features provides valuable insights into the data's variability, distribution shape, and asymmetry. This analysis helps identify patterns, outliers, and unique characteristics, guiding data preprocessing and modeling decisions for improved identity verification accuracy.
+
+```python
+# Calculate standard deviation, skewness, and kurtosis for each feature
+std_dev = features.std(axis=1)
+skewness = features.skew(axis=1)
+kurtosis = features.kurtosis(axis=1)
+```
+
+```python
+# Create a new DataFrame with labels and statistical metrics
+df_stats = pd.DataFrame({'Label': labels, 'Standard Deviation': std_dev, 'Skewness': skewness, 'Kurtosis': kurtosis})
+
+# Set the colors for different label values
+label_colors = {0: 'red', 1: 'blue'}
+```
+
+```python
+# Plot the graphs
+plt.figure(figsize=(10, 6))
+sns.scatterplot(data=df_stats, x='Standard Deviation', y='Skewness', hue='Label', palette=label_colors)
+plt.title('Standard Deviation vs Skewness')
+plt.xlabel('Standard Deviation')
+plt.ylabel('Skewness')
+plt.savefig('stdVsSkew.png')
+plt.show()
+```
+![stdVsSkew.png](stdVsSkew.png)
+
+
+```python
+plt.figure(figsize=(10, 6))
+sns.scatterplot(data=df_stats, x='Standard Deviation', y='Kurtosis', hue='Label', palette=label_colors)
+plt.title('Standard Deviation vs Kurtosis')
+plt.xlabel('Standard Deviation')
+plt.ylabel('Kurtosis')
+plt.savefig('stdVsKur.png')
+plt.show()
+```
+![stdVsSkew.png](stdVsSkew.png)
+
+
+```python
+plt.figure(figsize=(10, 6))
+sns.scatterplot(data=df_stats, x='Skewness', y='Kurtosis', hue='Label', palette=label_colors)
+plt.title('Skewness vs Kurtosis')
+plt.xlabel('Skewness')
+plt.ylabel('Kurtosis')
+plt.savefig('skewVsKur.png')
+plt.show()
+```
+![skewVsKur.png](skewVsKur.png)
+
+## Train-Val split 
+
+```python
+# Convert the features to a NumPy array
+X = features.to_numpy()
+
+# Convert the labels to a NumPy array
+y = labels.to_numpy()
+
+# Perform a stratified train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, stratify=y, random_state=42)
+```
+
+## Training an SVM Radial Model
+```python3
+# Train an SVM radial model
+svm_model = SVC(kernel='rbf')
+svm_model.fit(X, y)
+
+# Evaluate the model on the test set
+accuracy = svm_model.score(X_test, y_test)
+print(f"Accuracy: {accuracy}")
+```
 
 ### Principal Component Analysis (PCA)
 
@@ -117,7 +188,7 @@ Based on the limitations of PCA analysis, I recognized the need to explore alter
 
 Stay tuned for updates as I delve deeper into the project, explore new approaches, and work towards improving the accuracy of the identity verification model.
 
-## Train-Val split 
+
 
 
 
