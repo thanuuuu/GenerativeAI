@@ -26,6 +26,67 @@ Feel free to explore the repository and utilize the resources to enhance your un
 
 This GitHub repository addresses the critical issue of identity fraud in the digital realm. As a participant in the global competition, I have successfully completed the project and would like to share insights into my approach.
 
+## Importing Libraries
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+import plotly.express as px
+from tqdm import tqdm
+import seaborn as sns
+from sklearn.svm import SVC
+```
+
+```python
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torchvision import models
+from torch.utils.data import TensorDataset, DataLoader
+from torchvision.models import vgg19
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+import xgboost as xgb
+from PIL import Image
+from torchvision import transforms as T
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import accuracy_score
+```
+
+```python
+import sys
+from tqdm import tqdm
+import time
+import copy
+```
+
+## Reading the datasets
+
+```python
+# Load the CSV file
+data = pd.read_csv('train.csv')
+test_data = pd.read_csv('test.csv')
+```
+
+```python
+# Separate the labels and features
+labels = data.iloc[:, 0]
+features = data.iloc[:, 1:]
+```
+
+```python
+# Separate the labels and features
+labels = data.iloc[:, 0]
+features = data.iloc[:, 1:]
+```
+
+
+
+
+
 ## Data Visualization
 
 ### Principal Component Analysis (PCA)
@@ -55,6 +116,15 @@ To assess the variance contained within the principal components, I generated sc
 Based on the limitations of PCA analysis, I recognized the need to explore alternative feature extraction techniques or consider more advanced models. Further investigations will focus on methods such as deep learning architectures, feature engineering, or leveraging pre-trained models to enhance classification performance.
 
 Stay tuned for updates as I delve deeper into the project, explore new approaches, and work towards improving the accuracy of the identity verification model.
+
+## Train-Val split 
+
+
+
+
+## Using Support Vector Classifier
+
+I experimented with the Support Vector Classifier (SVC) for identity verification. It showed high accuracy on the training and validation sets but didn't perform as well on the test set provided by the bitgrit platform. SVC is a popular classification algorithm known for handling complex decision boundaries. I'll explore other approaches, like ensemble methods or fine-tuning SVC hyperparameters, to improve model performance and enhance the accuracy of the identity verification system.
 
 ## Project Structure
 
