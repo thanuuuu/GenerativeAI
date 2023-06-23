@@ -36,13 +36,19 @@ To gain insights into the dataset and understand the potential for image classif
 
 The 2D plot using the first two principal components provided a preliminary understanding of the data's separability. However, it revealed limited discriminative patterns between real and fake profile photos.
 
+![PCA 2D Plot](images/pca2.png)
+
 #### 3D Visualization
 
 By considering the third principal component, the 3D plot offered additional insights into the dataset's structure. Although some separation between real and fake profiles was observed, it remained insufficient for reliable image classification.
 
+![PCA 3D Scatterplot](images/scatter3d.png)
+
 ### Scree Plots
 
 To assess the variance contained within the principal components, I generated scree plots. These plots demonstrated the diminishing amount of explained variance as we considered additional principal components. The analysis revealed that the initial 10 principal components contained insufficient information for effective image classification.
+
+![scree plot](images/scree.png)
 
 ## Next Steps
 
