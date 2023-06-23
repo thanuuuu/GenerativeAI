@@ -110,7 +110,7 @@ plt.ylabel('Skewness')
 plt.savefig('stdVsSkew.png')
 plt.show()
 ```
-![stdVsSkew.png](stdVsSkew.png)
+![stdVsSkew.png](images/stdVsSkew.png)
 
 
 ```python
@@ -122,7 +122,7 @@ plt.ylabel('Kurtosis')
 plt.savefig('stdVsKur.png')
 plt.show()
 ```
-![stdVsSkew.png](stdVsSkew.png)
+![stdVsSkew.png](images/stdVsSkew.png)
 
 
 ```python
@@ -134,7 +134,7 @@ plt.ylabel('Kurtosis')
 plt.savefig('skewVsKur.png')
 plt.show()
 ```
-![skewVsKur.png](skewVsKur.png)
+![skewVsKur.png](images/skewVsKur.png)
 
 ## Train-Val split 
 
